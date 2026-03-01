@@ -2,8 +2,9 @@
 
 ## Sub Capaian Pembelajaran
 
-1. Mahasiswa mampu mengimplementasikan prinsip polymorphism
-2. Mahasiswa mampu menggunakan abstract class sesuai dengan kebutuhan
+1. Mahasiswa mampu menerapkan polymorphism (runtime dispatch) melalui pemanggilan method virtual pada referensi bertipe kelas induk.
+2. Mahasiswa mampu mengimplementasikan overriding (override) untuk mengubah perilaku method virtual dari kelas induk.
+3. Mahasiswa mampu melakukan upcasting dan downcasting secara aman serta memahami risiko cast yang salah.
 
 ## Lingkungan Pengembangan
 
@@ -23,70 +24,126 @@
 
 ## Soal-soal
 
-### Parade Hewan dan Suara
+### Parade Hewan
 
 Buat solusi dari soal ini di project `Solution` folder `PetParade` dengan namespace `Solution.PetParade`.
 
-Buatlah sebuah kelas publik abstrak bernama `Hewan` yang digunakan untuk merepresentasikan hewan di kebun binatang. Seekor Hewan memiliki satu informasi sebagai variabel instance yaitu: `_nama` (tipe string). Kelas `Hewan` harus memiliki sebuah konstruktor yang menginisialisasi variabel instance tersebut. Sediakan properti dengan metode setter dan getter public untuk variabel instance yaitu `Nama`. Kelas `Hewan` juga memiliki sebuah metode abstrak `Bersuara` yang akan mengembalikan suara (tipe string) dari hewan tersebut.
+Sebuah taman hiburan mengadakan parade hewan setiap akhir pekan. Dalam parade tersebut, berbagai jenis hewan tampil dan memperkenalkan diri dengan suara khasnya masing-masing. Panitia parade ingin membuat sistem sederhana untuk mengelola daftar hewan dan menampilkan suara mereka secara bergantian.
 
-Dari kelas `Hewan`, turunkan dua kelas konkrit publik yaitu `Kucing` dan `Anjing`. Buat implementasi dari metode abstrak `Bersuara` di kedua kelas ini. Kelas `Kucing` mengembalikan suara "Meong" saat metode `Bersuara` dipanggil. Sedangkan kelas `Anjing` mengembalikan suara "Guk" saat metode `Bersuara` dipanggil.
+Buatlah sebuah kelas publik bernama `Hewan` yang merepresentasikan hewan secara umum. Kelas ini memiliki satu informasi penting berupa nama hewan yang disimpan dalam field private `_nama` bertipe string. Sediakan properti publik `Nama` untuk membaca dan mengubah nilai tersebut. Kelas `Hewan` harus memiliki sebuah konstruktor yang menerima nama hewan saat objek dibuat.
 
-Buat kelas publik `ParadeHewan`. Deklarasikan atribut private `_listHewan` (tipe `List<Hewan>`) untuk menyimpan daftar hewan yang ikut serta di parade hewan. Buat properti getter publik `ListHewan`. Buat metode publik `TambahHewan` yang menerima parameter bertipe `Hewan`. Ketika metode ini dipanggil simpan hewan di atribut `_listHewan`. Metode ini digunakan untuk mendaftarkan hewan baru ke parade hewan. Buat metode publik `HapusHewan` yang menerima parameter bertipe `Hewan`. Hapus hewan di `_listHewan` jika metode ini dipanggil. Buat metode `MulaiParade` yang menerima parameter `putaran` (tipe int). Jika metode ini dipanggil, maka seluruh hewan yang terdaftar akan bersuara sesuai dengan urutan di `_listHewan` dan diulang sebanyak n putaran.
+Tambahkan sebuah metode publik bernama `Bersuara` yang bertipe `virtual` dan mengembalikan string. Secara default, metode ini mengembalikan teks `"Tidak diketahui"`.
 
-Buatlah sebuah kelas publik bernama `Program` yang didalamnya terdapat metode static `Main`. Instansiasi beberapa objek dari kelas `Kucing` dan `Anjing`, dan `ParadeHewan`. Daftarkan hewan-hewan tersebut ke objek `ParadeHewan` kemudian tampilkan suara dari kedua hewan tersebut ke layar dengan memanggil metode `MulaiParade` dengan format:
+Selanjutnya, buat dua kelas turunan dari `Hewan`, yaitu `Kucing` dan `Anjing`. Kelas `Kucing` harus meng-override metode `Bersuara` sehingga mengembalikan `"Meong"`, sedangkan kelas `Anjing` harus meng-override metode tersebut sehingga mengembalikan `"Guk"`. Tambahkan masing-masing satu properti khusus pada setiap kelas turunan (misalnya `WarnaBulu` untuk `Kucing` dan `LevelPatuh` untuk `Anjing`).
 
-"{namaHewan} bersuara: {suaraHewan}"
+Buat kelas publik bernama `ParadeHewan` yang memiliki atribut private berupa `List<Hewan>` untuk menyimpan semua hewan yang ikut parade. Sediakan metode `TambahHewan` untuk menambahkan hewan ke dalam daftar, serta metode `HapusHewan` untuk menghapus hewan dari daftar.
 
-**Catatan**: Perhatikan bagaimana alternatif penulisan kode jika tidak menggunakan polymorphism. Metode `TambahHewan`, `HapusHewan`, harus dibuat untuk setiap jenis hewan. Anda juga harus mengimplementasikan list hewan untuk semua jenis hewan yang berbeda-beda. Akibatnya metode `MulaiParade` harus mengiterasi banyak list hewan yang berbeda-beda.
+Tambahkan metode `MulaiParade(int putaran)` yang akan menampilkan suara setiap hewan sesuai urutan di dalam daftar dan diulang sebanyak jumlah putaran yang diberikan. Format tampilannya adalah:
+
+```
+{Nama} bersuara: {hasilBersuara}
+```
+
+Terakhir, buat kelas `Program` dengan metode statik `Main`. Instansiasikan beberapa objek `Kucing` dan `Anjing`, tambahkan ke dalam `ParadeHewan`, lalu panggil `MulaiParade` untuk menampilkan suara mereka ke layar.
+
+---
 
 ### Studio Musik
 
 Buat solusi dari soal ini di project `Solution` folder `MusicStudio` dengan namespace `Solution.MusicStudio`.
 
-Sebuah studio musik memiliki berbagai jenis instrumen. Setiap instrumen memiliki karakteristik suaranya masing-masing.
+Sebuah studio musik memiliki berbagai jenis instrumen yang dapat dimainkan. Setiap instrumen memiliki nama dan suara khas yang berbeda ketika dimainkan. Pemilik studio ingin membuat sistem untuk menyimpan berbagai instrumen dan memainkannya secara bergantian.
 
-Buatlah sebuah kelas publik abstrak bernama `Instrumen` yang memiliki informasi sebagai variabel instance yaitu: `_nama` (tipe string). Kelas Instrumen harus memiliki sebuah konstruktor yang menginisialisasi variabel instance tersebut dan metode abstrak `Mainkan` yang mengembalikan suara dari instrumen tersebut.
+Buatlah sebuah kelas publik bernama `Instrumen` yang memiliki field private `_nama` bertipe string dan properti publik `Nama`. Sediakan konstruktor untuk menginisialisasi nama instrumen saat objek dibuat.
 
-Dari kelas `Instrumen`, turunkan dua kelas konkrit publik yaitu `Gitar` dan `Piano`. Kelas `Gitar` ketika memainkan metode `Mainkan` akan mengembalikan "tring tring", sedangkan kelas `Piano` akan mengembalikan "tink tink".
+Tambahkan metode publik bertipe `virtual` bernama `Mainkan` yang mengembalikan string. Secara default, metode ini mengembalikan `"Tidak ada suara"`.
 
-Buatlah sebuah kelas bernama `StudioMusik` yang memiliki informasi sebagai variabel instance berupa array instrumen `_listInstrumen` (tipe List<Instrumen>). Buat properti getter publik `ListInstrumen`. Kelas `StudioMusik` harus memiliki metode untuk menambahkan instrumen ke dalam array dengan nama `TambahInstrumen`, dan metode `MainkanInstrumen` yang mengembalikan nilai bertipe string yang merupakan gabungan seluruh suara instrumen yang ada di dalam array dengan format:
+Buat dua kelas turunan, yaitu `Gitar` dan `Piano`. Kelas `Gitar` harus meng-override metode `Mainkan` sehingga mengembalikan `"tring tring"`, sedangkan kelas `Piano` harus meng-override metode tersebut sehingga mengembalikan `"tink tink"`. Tambahkan satu properti khusus pada masing-masing kelas (misalnya `JumlahSenar` pada `Gitar` dan `JumlahTuts` pada `Piano`).
 
-"{namaInstrumen} berbunyi: {suaraInstrumen}"
+Buat kelas `StudioMusik` yang memiliki atribut private berupa `List<Instrumen>` untuk menyimpan daftar instrumen. Sediakan metode `TambahInstrumen` untuk menambahkan instrumen ke dalam daftar.
 
-Buatlah sebuah kelas bernama `Program` yang didalamnya terdapat metode static `Main`. Instansiasi objek dari kelas `StudioMusik`, tambahkan beberapa instrumen ke dalam daftar, dan tampilkan informasi dari semua instrumen yang ada di daftar ke layar dengan memanggil metode `MainkanInstrumen`.
+Tambahkan metode `MainkanInstrumen` yang akan mengembalikan gabungan suara seluruh instrumen dengan format:
 
-### Soal: Studio Seni
+```
+{Nama} berbunyi: {hasilMainkan}
+```
 
-Buat solusi dari soal ini di project `Solution` folder `Arts` dengan namespace `Solution.Arts`.
+Buat kelas `Program` dan metode `Main` untuk menguji sistem dengan membuat beberapa instrumen dan memanggil metode `MainkanInstrumen`.
 
-Sebuah studio seni memiliki berbagai jenis karya seni. Setiap karya seni memiliki deskripsi dan cara khas untuk menampilkan karyanya.
+---
 
-Buatlah sebuah kelas abstrak publik bernama `KaryaSeni` yang memiliki informasi sebagai variabel instance yaitu: `_judul` (tipe string). Kelas `KaryaSeni` harus memiliki sebuah konstruktor yang menginisialisasi variabel instance tersebut dan metode abstrak `Deskripsi` yang mengembalikan deskripsi dari karya seni tersebut serta metode abstrak `Tampilkan` yang mengembalikan cara menampilkan karya seni tersebut.
+### Bengkel Kendaraan
 
-Dari kelas `KaryaSeni`, turunkan dua kelas konkrit publik yaitu `Lukisan` dan `Patung`. Kelas `Lukisan` ketika memanggil metode `Deskripsi` akan mengembalikan "Sebuah gambar yang dilukis di atas kanvas", dan metode `Tampilkan` mengembalikan "Digantung di dinding". Sedangkan kelas `Patung` ketika memanggil metode `Deskripsi` akan mengembalikan "Sebuah objek tiga dimensi yang dibentuk", dan metode `Tampilkan` mengembalikan "Diletakkan di atas meja atau lantai".
+Buat solusi dari soal ini di project `Solution` folder `Workshop` dengan namespace `Solution.Workshop`.
 
-Buatlah sebuah kelas publik bernama `StudioSeni` yang memiliki informasi sebagai variabel instance berupa daftar karya seni `_listKarya` (tipe List<KaryaSeni>). Buat properti getter publik `ListKarya`. Kelas `StudioSeni` harus memiliki metode untuk menambahkan karya seni ke dalam daftar dengan nama `TambahKaryaSeni` dan metode `TampilkanSemuaKarya` yang mengembalikan daftar cara menampilkan semua karya seni yang ada di dalam daftar.
+Sebuah bengkel menerima berbagai jenis kendaraan untuk diservis setiap hari. Setiap kendaraan memiliki nomor plat dan prosedur servis yang berbeda tergantung jenisnya. Pemilik bengkel ingin membuat sistem untuk mengelola kendaraan yang masuk dan memproses servisnya.
 
-Buatlah sebuah kelas bernama `Program` yang didalamnya terdapat metode static `Main`. Instansiasi objek dari kelas `StudioSeni`, tambahkan beberapa karya seni ke dalam daftar, dan tampilkan cara menampilkan semua karya seni yang ada di daftar ke layar dengan memanggil metode `TampilkanSemuaKarya`.
+Buatlah sebuah kelas publik bernama `Kendaraan` yang memiliki field private `_plat` bertipe string dan properti publik `Plat`. Sediakan konstruktor untuk menginisialisasi nomor plat kendaraan.
 
-**Catatan**: Fokus pada konsep polymorphism dimana kita dapat memanipulasi objek dari kelas turunan sebagai objek dari kelas induk.
+Tambahkan metode publik bertipe `virtual` bernama `Servis` yang secara default mengembalikan `"Servis umum"`.
 
-### Extra
+Buat dua kelas turunan, yaitu `Mobil` dan `Motor`. Kelas `Mobil` harus meng-override metode `Servis` sehingga mengembalikan `"Ganti oli + cek rem"`, sedangkan kelas `Motor` harus meng-override metode tersebut sehingga mengembalikan `"Ganti oli + cek rantai"`.
 
-> Saatnya Kreatif!
+Buat kelas `Bengkel` yang memiliki atribut private berupa `List<Kendaraan>` untuk menyimpan kendaraan yang akan diservis. Sediakan metode `Tambah` untuk menambahkan kendaraan dan metode `ProsesServis(int putaran)` untuk memproses servis setiap kendaraan sesuai jumlah putaran yang diberikan.
 
-Buat soal Anda sendiri dan solusinya di project `Solution` folder `Extra` dengan namespace `Solution.Extra` di file `Extra.cs`.
+Format output servis adalah:
 
-Buat spesifikasi soal Anda sendiri yang memuat hal-hal sebagai berikut:
+```
+{Plat} servis: {hasilServis}
+```
 
-- Nama kelas abstrak dan kelas konkrit yang dibuat. Jelaskan masing-masing kegunaannya.
-- Atribut dan properti apa saja yang harus ada di kelas.
-- Metode apa saja yang dibutuhkan.
-- Validasi atau aturan apa yang harus dilakukan.
-- Penggunaan prinsip polymorphism
+Buat kelas `Program` untuk menguji implementasi ini.
 
-Kemudian, implementasikan solusi kelas dari soal Anda di file `Extra.cs` dan eksekusi implementasinya di `Program.cs`.
+---
+
+### Pusat Notifikasi
+
+Buat solusi dari soal ini di project `Solution` folder `NotificationCenter` dengan namespace `Solution.NotificationCenter`.
+
+Sebuah perusahaan memiliki sistem notifikasi yang dapat mengirim pesan melalui berbagai kanal seperti email dan SMS. Setiap jenis notifikasi memiliki cara pengiriman dan informasi tambahan yang berbeda.
+
+Buat kelas publik bernama `Notifikasi` dengan field private `_tujuan` bertipe string dan properti publik `Tujuan`. Tambahkan konstruktor untuk menginisialisasi tujuan notifikasi.
+
+Tambahkan metode publik bertipe `virtual` bernama `Kirim` yang secara default mengembalikan `"Notifikasi terkirim"`.
+
+Buat dua kelas turunan, yaitu `EmailNotifikasi` dan `SmsNotifikasi`. Kelas `EmailNotifikasi` memiliki properti tambahan `Subjek` dan meng-override metode `Kirim` sehingga mengembalikan `"Email terkirim"`. Kelas `SmsNotifikasi` memiliki properti tambahan `Provider` dan meng-override metode `Kirim` sehingga mengembalikan `"SMS terkirim"`.
+
+Buat kelas `PusatNotifikasi` yang menyimpan daftar notifikasi dalam `List<Notifikasi>`. Sediakan metode `Tambah` untuk menambahkan notifikasi.
+
+Tambahkan metode `KirimSemua` yang menampilkan hasil pengiriman seluruh notifikasi dalam format:
+
+```
+{Tujuan}: {hasilKirim}
+```
+
+Tambahkan pula metode `DetailSemua` yang menggunakan pattern matching (`is`) untuk menampilkan detail khusus setiap jenis notifikasi.
+
+Buat kelas `Program` untuk menguji sistem ini.
+
+---
+
+### Sistem Pembayaran
+
+Buat solusi dari soal ini di project `Solution` folder `PaymentSystem` dengan namespace `Solution.PaymentSystem`.
+
+Sebuah kasir modern mendukung berbagai metode pembayaran seperti tunai, QRIS, dan kartu bank. Setiap metode pembayaran memiliki cara pemrosesan yang berbeda.
+
+Buat kelas publik bernama `MetodePembayaran` dengan field private `_nama` bertipe string dan properti publik `Nama`. Sediakan konstruktor untuk menginisialisasi nama metode pembayaran.
+
+Tambahkan metode publik bertipe `virtual` bernama `Bayar(decimal nominal)` yang secara default mengembalikan `"Pembayaran diproses"`.
+
+Buat tiga kelas turunan, yaitu `Cash`, `Qris`, dan `Kartu`. Kelas `Cash` meng-override metode `Bayar` sehingga menampilkan `"Bayar tunai sebesar {nominal}"`. Kelas `Qris` memiliki properti tambahan `MerchantId` dan meng-override metode tersebut sehingga menampilkan `"Bayar QRIS ke {MerchantId} sebesar {nominal}"`. Kelas `Kartu` memiliki properti tambahan `NamaBank` dan meng-override metode tersebut sehingga menampilkan `"Bayar kartu {NamaBank} sebesar {nominal}"`.
+
+Buat kelas `Kasir` yang menyimpan daftar metode pembayaran dalam `List<MetodePembayaran>`. Sediakan metode `Tambah` untuk menambahkan metode pembayaran.
+
+Tambahkan metode `Proses(decimal nominal)` untuk memproses semua metode pembayaran dalam format:
+
+```
+{Nama}: {hasilBayar}
+```
+
+Tambahkan metode `RingkasanQris` yang menggunakan pattern matching untuk menampilkan hanya metode pembayaran bertipe `Qris`.
+
+Buat kelas `Program` untuk menguji implementasi ini.
 
 === Selesai ===
-
-

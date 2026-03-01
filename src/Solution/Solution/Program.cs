@@ -1,6 +1,8 @@
-﻿using Solution.Arts;
-using Solution.MusicStudio;
+﻿using Solution.MusicStudio;
+using Solution.NotificationCenter;
+using Solution.PaymentSystem;
 using Solution.PetParade;
+using Solution.Workshop;
 
 namespace Solution;
 
@@ -10,12 +12,26 @@ internal class Program
     {
         // PetParade
 
+
+        Console.ReadLine();
+
         // MusicStudio
 
-       
-        // Arts
 
-      
-        // Extra
+        Console.ReadLine();
+
+        // Workshop
+
+        Console.ReadLine();
+
+        // NotificationCenter
+
+
+        Console.ReadLine();
+
+        // Payment Methods
+
+
+        Console.ReadLine();
     }
 }

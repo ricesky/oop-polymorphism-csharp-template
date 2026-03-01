@@ -1,77 +1,87 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Solution.PetParade;
 using System;
 using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Solution.PetParade;
 
-namespace Solution.PetParade.Tests
+namespace Solution.Tests.PetParade
 {
     [TestClass]
     public class PetParadeTests
     {
         [TestMethod]
-        public void Kucing_Bersuara_ReturnsMeong()
+        public void Hewan_Bersuara_Default_TidakDiketahui()
         {
-            var kucing = new Kucing("Milo");
-            Assert.AreEqual("Meong", kucing.Bersuara());
+            var h = new Hewan("HewanUmum");
+            Assert.AreEqual("Tidak diketahui", h.Bersuara());
         }
 
         [TestMethod]
-        public void Anjing_Bersuara_ReturnsGuk()
+        public void Kucing_Bersuara_Meong_And_HasWarnaBulu()
         {
-            var anjing = new Anjing("Rex");
-            Assert.AreEqual("Guk", anjing.Bersuara());
+            var k = new Kucing("Milo", "Putih");
+            Assert.AreEqual("Meong", k.Bersuara());
+            Assert.AreEqual("Putih", k.WarnaBulu);
         }
 
         [TestMethod]
-        public void ParadeHewan_MulaiParade_DisplaysCorrectSounds()
+        public void Anjing_Bersuara_Guk_And_HasLevelPatuh()
+        {
+            var a = new Anjing("Bobi", 5);
+            Assert.AreEqual("Guk", a.Bersuara());
+            Assert.AreEqual(5, a.LevelPatuh);
+        }
+
+        [TestMethod]
+        public void ParadeHewan_TambahDanHapus_Berfungsi()
         {
             var parade = new ParadeHewan();
-            parade.TambahHewan(new Kucing("Milo"));
-            parade.TambahHewan(new Anjing("Rex"));
+            var k = new Kucing("Milo", "Putih");
 
-            using (var sw = new StringWriter())
+            parade.TambahHewan(k);
+            Assert.AreEqual(1, parade.ListHewan.Count);
+
+            parade.HapusHewan(k);
+            Assert.AreEqual(0, parade.ListHewan.Count);
+        }
+
+        [TestMethod]
+        public void MulaiParade_MencetakSesuaiUrutan_DanDiulangSesuaiPutaran()
+        {
+            var parade = new ParadeHewan();
+            parade.TambahHewan(new Kucing("Milo", "Putih"));
+            parade.TambahHewan(new Anjing("Bobi", 3));
+
+            var sw = new StringWriter();
+            TextWriter originalOut = Console.Out;
+
+            try
             {
                 Console.SetOut(sw);
 
-                parade.MulaiParade(1);
+                parade.MulaiParade(2);
 
-                var expected = "Milo bersuara: Meong" + Environment.NewLine + "Rex bersuara: Guk" + Environment.NewLine;
+                var expected =
+                    "Milo bersuara: Meong" + Environment.NewLine +
+                    "Bobi bersuara: Guk" + Environment.NewLine +
+                    "Milo bersuara: Meong" + Environment.NewLine +
+                    "Bobi bersuara: Guk" + Environment.NewLine;
+
                 Assert.AreEqual(expected, sw.ToString());
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
             }
         }
 
         [TestMethod]
-        public void ParadeHewan_TambahDanHapusHewan_JumlahBenar()
+        public void MulaiParade_PutaranKurangAtauSamaDengan0_Throw()
         {
-            // Membuat objek ParadeHewan dan menambahkan hewan
             var parade = new ParadeHewan();
-            parade.TambahHewan(new Kucing("Milo"));
-            parade.TambahHewan(new Anjing("Rex"));
-            parade.TambahHewan(new Kucing("Luna"));
+            parade.TambahHewan(new Hewan("HewanUmum"));
 
-            // Memeriksa jumlah hewan setelah penambahan
-            Assert.AreEqual(3, parade.ListHewan.Count, "Jumlah hewan setelah penambahan seharusnya 3.");
-
-            // Menghapus hewan dan memeriksa jumlah hewan setelah penghapusan
-            parade.HapusHewan(parade.ListHewan[0]); // Misalkan menghapus hewan pertama dalam list
-            Assert.AreEqual(2, parade.ListHewan.Count, "Jumlah hewan setelah penghapusan seharusnya 2.");
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => parade.MulaiParade(0));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => parade.MulaiParade(-1));
         }
-
-        [TestMethod]
-        public void ParadeHewan_NamaHewanBenar_SetelahPenambahan()
-        {
-            // Membuat objek ParadeHewan dan menambahkan hewan
-            var parade = new ParadeHewan();
-            parade.TambahHewan(new Kucing("Milo"));
-            parade.TambahHewan(new Anjing("Rex"));
-
-            // Memeriksa nama hewan pertama yang ditambahkan
-            Assert.AreEqual("Milo", parade.ListHewan[0].Nama, "Nama hewan pertama seharusnya Milo.");
-
-            // Memeriksa nama hewan kedua yang ditambahkan
-            Assert.AreEqual("Rex", parade.ListHewan[1].Nama, "Nama hewan kedua seharusnya Rex.");
-        }
-
-
     }
 }
